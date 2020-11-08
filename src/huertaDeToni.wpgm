@@ -2,6 +2,10 @@ import wollok.game.*
 import toni.*
 import plantas.*
 import pachamama.*
+import mercado.*
+
+const supermercado = new Mercado(reservaOro=2000,position=game.at(13,7),image="supermarket.jpg") 
+const mercadito = new Mercado(reservaOro=500,position=game.at(13,13),image="mercado1.jpg")
 
 program huertaDeToni {
 	game.width(15)
@@ -20,7 +24,11 @@ program huertaDeToni {
 	keyboard.a().onPressDo{toni.regarLasPlantas()}
 	keyboard.x().onPressDo{toni.cosecharTodo()}
 	keyboard.c().onPressDo{toni.cosechar()}
-	
+	keyboard.v().onPressDo({ toni.venderEnMercado() })
+		keyboard.space().onPressDo({
+			game.say(toni,"Tengo " + toni.oro() + " monedas de oro " + 
+			" y quedan " + toni.plantasCosechadas().size() + " plantas por vender")
+		})
 	
 	// Configuramos una imagen de fondo, que se repite para cada celda del tablero.
 	game.ground("tierra.png")
@@ -45,6 +53,8 @@ program huertaDeToni {
 	 * un rango (1..13), que equivale a la lista [1, 2, 3, ..., 13].
 	 */
 //	(1..13).forEach { x => game.addVisualIn(new Maiz(position = value), game.at(x, 5)) }
-		
+	
+	game.addVisual(supermercado)
+	game.addVisual(mercadito)	
 	game.start()
 }

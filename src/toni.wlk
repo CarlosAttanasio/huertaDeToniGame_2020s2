@@ -1,5 +1,7 @@
 import wollok.game.*
 import plantas.*
+import mercado.*
+
 
 object toni {
 	const property image = "toni.png"
@@ -53,12 +55,13 @@ object toni {
 			self.position(planta.position())
 			self.cosechar()
 		})
+	game.say(self,"Cosechadas " + plantasCosechadas.size() + " plantas en total")
 	}
 	
 	method cosechar(){
 		const planta = game.uniqueCollider(self)
 		if(planta.estaListaParaCosechar()){
-			plantasSembradas.add(planta)
+			plantasCosechadas.add(planta)
 			game.removeVisual(planta)
 			plantasSembradas.remove(planta)
 			posicionesDePlantas.remove(self.position())
@@ -77,6 +80,15 @@ object toni {
 	
 	method venderCosecha(){
 		self.plantasCosechadas().forEach({planta => self.venderPlanta(planta)})
+		oro += self.valorCosechaActual()
+		plantasCosechadas.clear()
+	}
+	
+	method venderEnMercado() {
+		if (self.valorCosechaActual() == 0) { self.error("Nada para Vender") }
+			else if(position == mercadito.position() ) { mercadito.aceptarCompra() }
+			else if (position == supermercado.position()) { supermercado.aceptarCompra() }
+			else { self.error("no hay ningun mercado") }
 	}
 	
 	method valorCosechaActual(){
